@@ -1,0 +1,70 @@
+{
+  "name": "gorunmez-katman",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Prompt injection saldırılarını ve savunmalarını görünür kılan, açık kaynaklı etkileşimli simülasyon platformu.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dorukmemk/prompt-injection-simulation.git"
+  },
+  "homepage": "https://github.com/dorukmemk/prompt-injection-simulation",
+  "bugs": {
+    "url": "https://github.com/dorukmemk/prompt-injection-simulation/issues"
+  },
+  "keywords": [
+    "prompt-injection",
+    "ai-security",
+    "llm-security",
+    "owasp-llm01",
+    "mitre-atlas",
+    "education",
+    "simulation",
+    "turkish"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "cn": "^0.4.0",
+    "lucide-react": "^1.56.0",
+    "motion": "^14.2.0",
+    "radix-ui": "^1.8.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-resizable-panels": "^4.14.5",
+    "tailwindcss": "^4.3.3",
+    "tw-animate-css": "^1.4.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.4.0",
+    "shadcn": "^4.21.4",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.44.0",
+    "vite": "^7.1.7",
+    "vitest": "^3.2.7"
+  }
+}

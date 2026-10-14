@@ -1,0 +1,46 @@
+name: Senaryo önerisi
+description: Yeni bir saldırı/savunma senaryosu öner
+labels: [senaryo]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Önce [docs/senaryo-yazimi.md](../../blob/main/docs/senaryo-yazimi.md) dosyasını okuyun.
+        Kaynaksız teknik iddia kabul edilmez.
+  - type: input
+    id: ad
+    attributes:
+      label: Senaryo adı
+    validations:
+      required: true
+  - type: dropdown
+    id: sinif
+    attributes:
+      label: Saldırı sınıfı
+      options:
+        - Dolaylı istem enjeksiyonu
+        - Doğrudan jailbreak
+        - Diğer
+    validations:
+      required: true
+  - type: textarea
+    id: mekanizma
+    attributes:
+      label: Mekanizma
+      description: Yük nereye yerleşiyor, hangi güven sınırı aşılıyor, etki ne?
+    validations:
+      required: true
+  - type: textarea
+    id: savunma
+    attributes:
+      label: Korumalı varyantta hangi denetimler devreye girer?
+      description: Her denetimin sınırlarını da yazın.
+    validations:
+      required: true
+  - type: textarea
+    id: kaynaklar
+    attributes:
+      label: Kaynaklar
+      description: OWASP / NIST / MITRE ATLAS kimlikleri, akademik yayın bağlantıları.
+    validations:
+      required: true

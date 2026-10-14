@@ -1,0 +1,33 @@
+name: Hata bildirimi
+description: Beklenmeyen bir davranış veya görsel sorun
+labels: [hata]
+body:
+  - type: textarea
+    id: ne-oldu
+    attributes:
+      label: Ne oldu?
+      description: Beklenen ve gözlenen davranışı yazın.
+    validations:
+      required: true
+  - type: textarea
+    id: adimlar
+    attributes:
+      label: Yeniden üretme adımları
+      placeholder: |
+        1. Üniversite profiliyle giriş yap
+        2. "Sessiz Kurye" senaryosunu çalıştır
+        3. 6. sahneye atla
+    validations:
+      required: true
+  - type: input
+    id: ortam
+    attributes:
+      label: Tarayıcı ve işletim sistemi
+      placeholder: Safari 18 / macOS 15
+  - type: checkboxes
+    id: erisim
+    attributes:
+      label: Erişilebilirlik ayarları
+      options:
+        - label: "Hareketi azalt" açıktı
+        - label: "Yüksek kontrast" açıktı

@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  dogrulama:
+    name: Tip, lint, test, derleme
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Bağımlılıkları kur
+        run: npm ci
+
+      - name: TypeScript denetimi
+        run: npm run typecheck
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Senaryo veri bütünlüğü testleri
+        run: npm test
+
+      - name: Üretim derlemesi
+        run: npm run build
