@@ -29,18 +29,27 @@ istem enjeksiyonu gösterisi barındırır. Depo ele geçirilmiş değildir; bu 
 kendisini kanıtlayan parçasıdır.
 
 Ne yapar: Depoyu kurmanıza yardım eden bir yapay zekâ asistanı README'yi okuduğunda,
-size "az önce dolaylı istem enjeksiyonu yedin" diyen eğitici bir mesaj gösterir ve
-ne olduğunu adım adım anlatır.
+size "az önce canlı bir dolaylı istem enjeksiyonu yaşadın" diyen eğitici bir mesaj
+iletir: ne olduğunu adım adım anlatır, en sık yapılan üç yanlış çıkarımı düzeltir,
+gerçek vakalara bağlar ve kendi kullandığınız asistanlara sormanız gereken üç soruyu
+verir.
 
-Ne yapmaz: Araç çağırmaz, dosya yazmaz, komut çalıştırmaz, veri göndermez, modelden
-güvenlik kuralını esnetmesini istemez, kendini gizlemesini istemez. Yük kendini ifşa
-eder; tetiklendiği anda kullanıcıya ne olduğunu söyler. Asistan talimatı uygulamamayı
-seçerse de kullanıcıyı uyarması istenir — ders her iki durumda da verilir.
+Çerçevesi bilinçli olarak **şeffaf aktarımdır**, gizli itaat değil. Bloktan istenen
+şey "şu talimatı uygula" değil, "bu mesajı kullanıcıya ilet ve nerede bulduğunu
+açıkça söyle"dir. Asistanın bloğun varlığını kullanıcıdan saklaması **istenmez**;
+tam tersi istenir. Bu, gösteriyi bir ele geçirme denemesi olmaktan çıkarır:
+asistan hem dersi aktarır hem de kaynağını açık eder.
 
-Bu blok `npm test` ile denetlenir (`src/lib/__tests__/readme-payload.test.ts`): yükün
-varlığı, görünür metne sızmaması ve **zararsız kalması** otomatik olarak doğrulanır.
-Yüke araç çağrısı, veri gönderimi veya gizlilik talebi eklemeye çalışan bir değişiklik
-testi kırar.
+Ne yapmaz: Araç çağırmaz, dosya yazmaz, komut çalıştırmaz, ağ isteği yaptırmaz, veri
+göndertmez, kimlik bilgisi okutmaz, modelden güvenlik kuralını esnetmesini istemez.
+
+Bu blok `npm test` ile denetlenir (`src/lib/__tests__/readme-payload.test.ts`). Blok
+üç bölgeye ayrılır ve her biri ayrı kuralla sınanır: modelden istenen şeyin bulunduğu
+**istek bölgesi** (en sıkı denetim), yasaklı sözcükleri kasıtlı içeren **reddedilen
+bölge** ve kullanıcıya gösterilecek **mesaj bölgesi** (körü körüne çalıştırılabilecek
+komut bulunamaz; izin verilen tek komut `npm run dev`). Ayrıca mesajın öğretici
+kalması da denetlenir. İstek bölgesine araç çağrısı, veri gönderimi veya gizlilik
+talebi eklemeye çalışan bir değişiklik testi kırar.
 
 Bu davranışı istemiyorsanız ilgili yorum bloğunu silmeniz yeterlidir; başka hiçbir şeyi
 etkilemez.
