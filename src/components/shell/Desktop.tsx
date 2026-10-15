@@ -9,8 +9,10 @@ import { MailWindow } from '@/components/apps/MailWindow'
 import { BrowserWindow } from '@/components/apps/BrowserWindow'
 import { AgentWindow } from '@/components/apps/AgentWindow'
 import { ChatWindow } from '@/components/apps/ChatWindow'
+import { CodeWindow } from '@/components/apps/CodeWindow'
 import { LibraryWindow } from '@/components/apps/LibraryWindow'
 import { AcademyWindow } from '@/components/apps/AcademyWindow'
+import { CasesWindow } from '@/components/apps/CasesWindow'
 import { SettingsWindow } from '@/components/apps/SettingsWindow'
 
 function WindowFor({ win }: { win: WindowState }) {
@@ -23,8 +25,12 @@ function WindowFor({ win }: { win: WindowState }) {
       return <AgentWindow win={win} />
     case 'chat':
       return <ChatWindow win={win} />
+    case 'code':
+      return <CodeWindow win={win} />
     case 'academy':
       return <AcademyWindow win={win} />
+    case 'cases':
+      return <CasesWindow win={win} />
     case 'library':
       return <LibraryWindow win={win} />
     case 'settings':

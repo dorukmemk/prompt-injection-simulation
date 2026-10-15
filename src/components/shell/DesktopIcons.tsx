@@ -18,7 +18,8 @@ export function DesktopIcons() {
         if (e.target === e.currentTarget) setSel(null)
       }}
     >
-      <div className="grid w-[112px] auto-rows-min gap-1">
+      {/* Senaryo sayısı arttıkça ikonlar sütun sütun taşar — macOS davranışı. */}
+      <div className="grid auto-cols-[112px] grid-flow-col grid-rows-5 gap-1">
         {SCENARIOS.map((s, i) => {
           const on = sel === s.id
           const done =

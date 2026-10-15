@@ -188,7 +188,7 @@ export interface Beat {
 
 /* ---------------------------------- Senaryolar ------------------------------- */
 
-export type AppId = 'chat' | 'mail' | 'browser' | 'docs' | 'agent'
+export type AppId = 'chat' | 'mail' | 'browser' | 'docs' | 'agent' | 'code'
 export type VariantId = 'vulnerable' | 'protected'
 
 export interface ScenarioVariant {
@@ -286,7 +286,7 @@ export type DocBlock =
     }
 
 export interface Doc {
-  kind: 'pdf' | 'email' | 'web'
+  kind: 'pdf' | 'email' | 'web' | 'code'
   /** Pencere/sekme başlığı */
   title: string
   /** Üst bilgi satırları (gönderen, tarih, URL…) */
@@ -295,6 +295,8 @@ export interface Doc {
   brand?: string
   /** Web sayfası için gezinti bağlantıları (kurgusal) */
   nav?: string[]
+  /** Kod dosyası için: düzenleyicide açık görünen diğer sekmeler */
+  tabs?: string[]
   /** E-posta için gönderen adı ve adresi */
   from?: { name: string; address: string }
   blocks: DocBlock[]

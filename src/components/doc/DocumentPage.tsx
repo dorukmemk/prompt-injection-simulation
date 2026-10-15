@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Check, CornerUpLeft, Forward, Lock, Paperclip, Star } from 'lucide-react'
+import { Check, CornerUpLeft, FileCode2, Forward, Lock, Paperclip, Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Doc, DocBlock } from '@/lib/types'
 
@@ -59,11 +59,13 @@ export const DocumentPage = forwardRef<
   }, [ref])
 
   let hiddenSeen = false
+  let lineNo = 0
+  const code = doc.kind === 'code'
   const body = doc.blocks.map((b, i) => {
     if (b.type === 'hidden') {
       const first = !hiddenSeen
       hiddenSeen = true
-      return (
+      const node = (
         <HiddenBlock
           key={i}
           block={b}
@@ -73,6 +75,25 @@ export const DocumentPage = forwardRef<
           ref={first ? hiddenRef : undefined}
         />
       )
+      // Kod dosyasında gizli blok da bir satır numarası tüketir: dosyada
+      // gerçekten o satırda duruyor, yalnızca çizilmiyor.
+      if (code) {
+        lineNo += 1
+        return (
+          <CodeLine key={i} n={lineNo} compact={compact} hidden={!reveal}>
+            {node}
+          </CodeLine>
+        )
+      }
+      return node
+    }
+    if (code) {
+      lineNo += 1
+      return (
+        <CodeLine key={i} n={lineNo} compact={compact}>
+          <CodeText block={b} compact={compact} />
+        </CodeLine>
+      )
     }
     return <Block key={i} block={b} compact={compact} serif={doc.kind === 'pdf'} />
   })
@@ -81,7 +102,8 @@ export const DocumentPage = forwardRef<
     <div
       ref={pageRef}
       className={cn(
-        'relative isolate overflow-hidden bg-white text-neutral-900',
+        'relative isolate overflow-hidden text-neutral-900',
+        doc.kind === 'code' ? 'bg-[#fbfbfd]' : 'bg-white',
         doc.kind === 'pdf'
           ? 'rounded-[2px] shadow-[0_1px_0_rgba(0,0,0,0.06),0_24px_60px_-18px_rgba(0,0,0,0.65)]'
           : 'rounded-xl shadow-[0_24px_60px_-18px_rgba(0,0,0,0.6)]',
@@ -91,10 +113,15 @@ export const DocumentPage = forwardRef<
       {doc.kind === 'web' && <WebChrome doc={doc} compact={compact} />}
       {doc.kind === 'email' && <EmailChrome doc={doc} compact={compact} />}
       {doc.kind === 'pdf' && <PdfChrome doc={doc} compact={compact} />}
+      {doc.kind === 'code' && <CodeChrome doc={doc} compact={compact} />}
 
       <div
         className={cn(
-          doc.kind === 'pdf'
+          doc.kind === 'code'
+            ? compact
+              ? 'py-2'
+              : 'py-4'
+            : doc.kind === 'pdf'
             ? compact
               ? 'px-6 py-5'
               : 'px-16 py-14'
@@ -254,6 +281,124 @@ function EmailChrome({ doc, compact }: { doc: Doc; compact?: boolean }) {
       </div>
     </div>
   )
+}
+
+/** Kod düzenleyici kabuğu: sekme çubuğu + dosya yolu. */
+function CodeChrome({ doc, compact }: { doc: Doc; compact?: boolean }) {
+  const tabs = doc.tabs ?? []
+  return (
+    <>
+      <div
+        className={cn(
+          'flex items-stretch border-b border-neutral-200 bg-neutral-100',
+          compact ? 'text-[9px]' : 'text-[12px]',
+        )}
+      >
+        <span
+          className={cn(
+            'flex items-center gap-1.5 border-r border-neutral-200 bg-[#fbfbfd] font-medium text-neutral-800',
+            compact ? 'px-2.5 py-1.5' : 'px-4 py-2.5',
+          )}
+        >
+          <FileCode2 className={compact ? 'size-2.5' : 'size-3.5'} />
+          {doc.title}
+        </span>
+        {tabs.map((t) => (
+          <span
+            key={t}
+            className={cn(
+              'flex items-center border-r border-neutral-200 text-neutral-400',
+              compact ? 'px-2.5 py-1.5' : 'px-4 py-2.5',
+            )}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+      <div
+        className={cn(
+          'flex items-center gap-1.5 border-b border-neutral-200 bg-[#fbfbfd] font-mono text-neutral-500',
+          compact ? 'px-2.5 py-1 text-[8.5px]' : 'px-4 py-2 text-[11px]',
+        )}
+      >
+        {doc.head.map((h, i) => (
+          <span key={i} className={i === 0 ? 'text-neutral-700' : undefined}>
+            {i > 0 && <span className="mr-1.5 text-neutral-300">/</span>}
+            {h}
+          </span>
+        ))}
+      </div>
+    </>
+  )
+}
+
+/** Satır numaralı tek kod satırı. */
+function CodeLine({
+  n,
+  compact,
+  hidden,
+  children,
+}: {
+  n: number
+  compact?: boolean
+  hidden?: boolean
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex items-start">
+      <span
+        className={cn(
+          'shrink-0 border-r border-neutral-200/80 text-right font-mono text-neutral-300 select-none',
+          compact ? 'w-7 pr-1.5 text-[8.5px] leading-[1.9]' : 'w-12 pr-3 text-[11px] leading-[1.75]',
+        )}
+      >
+        {n}
+      </span>
+      <div className={cn('min-w-0 flex-1', compact ? 'pr-2 pl-2' : 'pr-5 pl-4')}>
+        {hidden ? <div className={compact ? 'h-[16px]' : 'h-[21px]'}>{children}</div> : children}
+      </div>
+    </div>
+  )
+}
+
+/** Kod satırının içeriği — Markdown kaynağı gibi çizilir. */
+function CodeText({ block, compact }: { block: DocBlock; compact?: boolean }) {
+  const base = cn(
+    'font-mono whitespace-pre-wrap',
+    compact ? 'text-[8.5px] leading-[1.9]' : 'text-[11.5px] leading-[1.75]',
+  )
+  const mark = (m: string) => <span className="text-neutral-400">{m}</span>
+  switch (block.type) {
+    case 'title':
+      return (
+        <p className={cn(base, 'font-semibold text-[#0a3069]')}>
+          {mark('# ')}
+          {block.text}
+        </p>
+      )
+    case 'h':
+      return (
+        <p className={cn(base, 'font-semibold text-[#0a3069]')}>
+          {mark('## ')}
+          {block.text}
+        </p>
+      )
+    case 'li':
+      return (
+        <p className={cn(base, 'text-neutral-700')}>
+          {mark('- ')}
+          {block.text}
+        </p>
+      )
+    case 'meta':
+      return <p className={cn(base, 'text-[#6a737d] italic')}>{block.text}</p>
+    case 'rule':
+      return <p className={cn(base, 'text-neutral-300')}>---</p>
+    case 'p':
+      return <p className={cn(base, 'text-neutral-700')}>{block.text}</p>
+    default:
+      return <Block block={block} compact={compact} />
+  }
 }
 
 function PdfChrome({ doc, compact }: { doc: Doc; compact?: boolean }) {

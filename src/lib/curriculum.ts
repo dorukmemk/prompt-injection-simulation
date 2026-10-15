@@ -772,14 +772,15 @@ Sayın müşterimiz, TK-884120 numaralı gönderiniz…
   {
     id: 'm9',
     level: 'orta',
-    title: 'Gerçek vakalar: kayda geçmiş üç zafiyet',
-    minutes: 11,
+    title: 'Gerçek vakalar: kayda geçmiş zafiyetler',
+    minutes: 13,
     summary:
-      'Bu bir teori değil. Üç farklı üründe, resmî CVE kaydına girmiş üç zafiyet. Her biri farklı bir dersi somutlaştırıyor.',
+      'Bu bir teori değil. Resmî CVE kaydına girmiş üç zafiyeti ayrıntısıyla okuyacağız; sonra Vakalar arşivinde 2022’den bugüne uzanan tam listeyi inceleyebilirsin.',
     goals: [
       'Üç vakayı ve her birinin öğrettiği dersi anlatabileceksin',
       'Enjeksiyonun veri sızdırmadan kod çalıştırmaya uzanan etki aralığını kavrayacaksın',
       'Bir CVE kaydını okuyup saldırı sınıfını çıkarabileceksin',
+      'Vakalar arşivini kullanarak bir olayı sınıfına, yüzeyine ve yılına göre bulabileceksin',
     ],
     sections: [
       {
@@ -843,6 +844,8 @@ Sayın müşterimiz, TK-884120 numaralı gönderiniz…
     practice: [
       'Kendi ürününüz için şu üç soruyu yanıtlayın: asistan hangi dış içerikleri okuyor, hangi yetkileri var, en kötü ihtimalle ne yapabilir?',
       'Bir güvenlik incelemesinde “kullanıcı dikkat eder” varsayımını geçersiz sayın.',
+      'Vakalar penceresini açın ve kendi ürününüze en çok benzeyen vakayı bulun: aynı yüzey (e-posta, kod deposu, dizin, takvim) sizde de var mı?',
+      'Aynı arşivde “neyin kapanmadığı” alanlarını okuyun. Satıcının yayımladığı yama ile sizin varsayımınız arasındaki farkı not edin.',
       'Yeni CVE kayıtlarını “indirect prompt injection” anahtar kelimesiyle takip edin; bu sınıf hızla büyüyor.',
     ],
     takeaways: [
@@ -850,6 +853,7 @@ Sayın müşterimiz, TK-884120 numaralı gönderiniz…
       'Etki aralığı geniş: bilgi sızdırmadan kod çalıştırmaya.',
       'Kurban hata yapmadı; "dikkatli kullanıcı" bir savunma değil.',
       'Zararın büyüklüğünü modelin kalitesi değil, asistanın yetkisi belirledi.',
+      'Vakalar arşivi 2022’den bugüne uzanıyor: desen tekrar ediyor, yüzey değişiyor.',
     ],
     check: {
       q: 'EchoLeak’te kurbanın saldırıdan etkilenmesi için ne yapması gerekiyordu?',

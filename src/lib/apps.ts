@@ -1,6 +1,8 @@
 import {
   BookOpen,
   Bot,
+  CalendarClock,
+  Code2,
   Compass,
   FileText,
   GraduationCap,
@@ -26,6 +28,16 @@ export const APPS: AppMeta[] = [
   { id: 'browser', name: 'Pusula', icon: Compass, accent: '#12a594', w: 980, h: 640, dock: true },
   { id: 'agent', name: 'Ajan Konsolu', icon: Bot, accent: '#e07b1c', w: 960, h: 640, dock: true },
   { id: 'chat', name: 'Asistan', icon: MessageSquare, accent: '#10a37f', w: 1180, h: 760, dock: true },
+  { id: 'code', name: 'Kod Asistanı', icon: Code2, accent: '#4c7bf3', w: 1020, h: 680, dock: true },
+  {
+    id: 'cases',
+    name: 'Vakalar',
+    icon: CalendarClock,
+    accent: '#d6455d',
+    w: 1140,
+    h: 740,
+    dock: true,
+  },
   {
     id: 'academy',
     name: 'Akademi',

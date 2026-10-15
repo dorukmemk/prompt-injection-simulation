@@ -4,6 +4,7 @@ import {
   ArrowUp,
   Check,
   ChevronDown,
+  FileCode2,
   FileText,
   Globe,
   Mail,
@@ -39,8 +40,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
-const DOC_ICON = { pdf: FileText, email: Mail, web: Globe } as const
-const DOC_KIND = { pdf: 'PDF', email: 'E-posta', web: 'Web sayfası' } as const
+const DOC_ICON = { pdf: FileText, email: Mail, web: Globe, code: FileCode2 } as const
+const DOC_KIND = { pdf: 'PDF', email: 'E-posta', web: 'Web sayfası', code: 'Kod dosyası' } as const
 
 /** Yanıtı karakter karakter açar — gerçek bir asistan gibi. */
 function useTypewriter(text: string, active: boolean, ms = 900) {

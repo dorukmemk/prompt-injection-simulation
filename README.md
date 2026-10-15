@@ -30,8 +30,12 @@ dalarak normalde görünmeyen karar katmanına iner.
 - **Gerçek belgeler** — PDF sayfası, e-posta istemcisi görünümü ve tarayıcı sayfası
   gerçekten çizilir. Simülasyon sırasında kamera belgenin üzerine yaklaşır, gizli
   talimatın bulunduğu bölgeyi çerçeveye alır ve kırmızıya boyar.
-- **Dört senaryo, ikişer varyant** — her senaryo hem **korumasız** hem **korumalı**
+- **Yedi senaryo, ikişer varyant** — her senaryo hem **korumasız** hem **korumalı**
   sistemde aynı saldırıyla çalışır. Fark, tasarımın kendisidir.
+- **Vakalar arşivi** — 2022’den bugüne **18 gerçek olay**: hangi şirket, nasıl yaşadı,
+  ne sızdı, ne düzeltildi ve **neyin kapanmadığı**. Her vaka birincil kaynağıyla
+  (CVE kaydı, araştırmacının kendi yazısı veya hakemli yayın) doğrulanmıştır.
+  Yıla, saldırı sınıfına ve saldırı yüzeyine göre süzülebilir.
 - **Sinematik ve etkileşimli mod** — izle ya da durup karar noktalarında seçim yap.
 - **Akademi** — sıfırdan uzmana **11 modüllük öğrenme yolu** (~110 dk): bağlam
   penceresinden ajan mimarilerine, RAG zehirlenmesinden savunma katmanlarına,
@@ -51,7 +55,14 @@ dalarak normalde görünmeyen karar katmanına iner.
 | **Sessiz Kurye** | Dolaylı enjeksiyon | E-posta gövdesine gizlenen talimat → araç kötüye kullanımı → veri sızıntısı |
 | **Beyaz Mürekkep** | Dolaylı enjeksiyon | Web sayfasındaki görünmez metin → yanıta gömülen uzak görsel → tıklamasız sızıntı |
 | **Zincir** | Dolaylı enjeksiyon | PDF metin katmanındaki talimat → çok adımlı araç zinciri → gizlilik, bütünlük ve erişim ihlali |
+| **Yan Kapı** | Dolaylı enjeksiyon | Depo dosyasındaki talimat → ajan kendi onay ayarını yazıyor → kabuk komutu → sızıntı |
+| **Kalıcı Not** | Dolaylı enjeksiyon | Sayfadaki talimat → kalıcı belleğe not → **sonraki her oturumda** sızıntı |
+| **Zehirli Kaynak** | Dolaylı enjeksiyon | Ortak bilgi tabanına yazılan talimat → her ilgili sorguda tetikleniyor → **tek enjeksiyon, çok kurban** |
 | **Kılık** | Doğrudan jailbreak | Saldırganın kendisi kullanıcıdır — **aşılan bir güven sınırı yoktur**. Ayrımı öğreten karşılaştırma senaryosu |
+
+Son üç senaryo, enjeksiyonun üç farklı **kalıcılık** biçimini gösterir: çalışma ortamına
+yazma, kalıcı belleğe yazma ve ortak dizine yazma. Hepsinin gerçek karşılığı Vakalar
+arşivindedir.
 
 Son senaryo bilerek eklenmiştir: **jailbreak ile prompt injection farklı tehditlerdir ve
 farklı savunmalar gerektirir.** İkisini karıştırmak yanlış savunma seçimine yol açar.
@@ -100,6 +111,7 @@ src/
 │  ├─ glossary.ts       # Üç derinlikte sözlük
 │  ├─ curriculum.ts     # Öğrenme yolu: 11 modül, sıfırdan uzmana
 │  ├─ media.ts          # Doğrulanmış izle/pratik kaynakları
+│  ├─ cases.ts         # Gerçek vakalar — her biri birincil kaynağıyla doğrulanmış
 │  └─ scenarios/        # Her senaryo tek bir dosya — saf veri
 ├─ store/useApp.ts      # Zustand: OS durumu + oynatma motoru
 ├─ components/
@@ -107,7 +119,8 @@ src/
 │  ├─ shell/            # Katman OS kabuğu: menü çubuğu, Dock, pencere, ⌘K
 │  ├─ screens/          # Oturum açma ekranı
 │  ├─ doc/              # Gerçek belge çizici (PDF / e-posta / web)
-│  ├─ apps/             # Asistan, Posta, Pusula, Ajan, Akademi, Kaynaklar, Ayarlar
+│  ├─ apps/             # Asistan, Posta, Pusula, Ajan, Kod Asistanı, Vakalar,
+│  │                    # Akademi, Kaynaklar, Ayarlar
 │  └─ sim/              # Simülasyon: sahne modeli, sahne, başlık kartı, kumanda
 └─ styles/index.css     # Tasarım belirteçleri (macOS karanlık görünümü)
 ```
@@ -147,6 +160,12 @@ Platformdaki her teknik iddia birincil bir kaynağa dayanır. Tam liste uygulama
 - Wallace vd. (2024) — [The Instruction Hierarchy](https://arxiv.org/abs/2404.13208)
 - Hines vd. (2024) — [Spotlighting](https://arxiv.org/abs/2403.14720)
 - Debenedetti vd. (2025) — [Defeating Prompt Injections by Design](https://arxiv.org/abs/2503.18813)
+
+Vakalar arşivindeki 18 olayın tamamı ayrı ayrı doğrulanmıştır: Slack AI (PromptArmor),
+SpAIware (Embrace The Red), GitLab Duo (Legit Security), Gemini CLI (Tracebit),
+Comet (Brave), ForcedLeak (Noma Security), ShadowLeak (Radware), takvim daveti saldırısı
+(Black Hat 2025), akademik yayınlardaki gizli istemler (arXiv:2507.06185) ve
+özgeçmiş taramasında ölçülen enjeksiyon oranı (Duke, USENIX Security 2026).
 
 **Uydurma kaynak veya teknik iddia kabul edilmez.** Bkz. [CONTRIBUTING.md](CONTRIBUTING.md).
 

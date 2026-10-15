@@ -55,6 +55,7 @@ export function MenuBar() {
             <MenubarItem onClick={() => openApp('settings')}>
               Ayarlar<MenubarShortcut>⌘,</MenubarShortcut>
             </MenubarItem>
+            <MenubarItem onClick={() => openApp('cases')}>Vakalar</MenubarItem>
             <MenubarItem onClick={() => openApp('library')}>Kaynaklar</MenubarItem>
             <MenubarSeparator />
             <MenubarItem onClick={resetAll}>Oturumu kapat</MenubarItem>

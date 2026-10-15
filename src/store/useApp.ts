@@ -9,7 +9,7 @@ export type SimPhase = 'closed' | 'pending' | 'diving' | 'running' | 'surfacing'
 export type SimMode = 'cinematic' | 'interactive'
 
 /** Masaüstünde açılabilen pencereler: senaryo uygulamaları + sistem araçları */
-export type WinId = AppId | 'library' | 'settings' | 'academy'
+export type WinId = AppId | 'library' | 'settings' | 'academy' | 'cases'
 
 export interface WindowState {
   app: WinId

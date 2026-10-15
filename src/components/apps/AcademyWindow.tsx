@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { motion } from 'motion/react'
 import {
   ArrowLeft,
+  ArrowRight,
   BookOpen,
+  CalendarClock,
   Check as CheckIcon,
   CircleAlert,
   Clock,
@@ -19,6 +21,7 @@ import { cn } from '@/lib/utils'
 import { LEVEL_COLOR, LEVEL_ORDER, MODULES, type Check, type Level, type Module } from '@/lib/curriculum'
 import { MEDIA, type MediaItem } from '@/lib/media'
 import { SCENARIO_MAP } from '@/lib/scenarios'
+import { casesForModule } from '@/lib/cases'
 import { refsOf } from '@/lib/references'
 import { useApp, type WindowState } from '@/store/useApp'
 import { Window } from '@/components/shell/Window'
@@ -229,6 +232,8 @@ function ModuleView({
 }) {
   const refs = refsOf(m.refs)
   const scenario = m.scenario ? SCENARIO_MAP[m.scenario] : null
+  const cases = casesForModule(m.id)
+  const openApp = useApp((st) => st.openApp)
 
   return (
     <div className="mx-auto max-w-[720px] p-6">
@@ -374,6 +379,41 @@ function ModuleView({
               </div>
             ))}
           </dl>
+        </div>
+      )}
+
+      {cases.length > 0 && (
+        <div className="mt-5 rounded-xl border border-[#d6455d]/30 bg-[#d6455d]/[0.07] p-4">
+          <h3 className="mb-1 flex items-center gap-1.5 text-[12px] font-semibold tracking-wide text-[#f08098] uppercase">
+            <CalendarClock className="size-3.5" /> Bu konu gerçekte yaşandı
+          </h3>
+          <p className="text-muted-foreground mb-3 text-[12.5px] leading-relaxed">
+            Aşağıdaki vakalar kayda geçmiş gerçek olaylardır; her biri birincil kaynağıyla
+            doğrulanmıştır. Tam arşiv Vakalar penceresindedir.
+          </p>
+          <div className="flex flex-col gap-1.5">
+            {cases.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => openApp('cases')}
+                className="bg-card/50 hover:bg-card flex items-center gap-2 rounded-lg border px-3 py-2 text-left transition-colors"
+              >
+                <span className="text-muted-foreground shrink-0 font-mono text-[10.5px]">
+                  {c.whenLabel}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-[13px] font-medium">
+                  {c.alias ?? c.target}
+                </span>
+                {c.cve && (
+                  <span className="text-muted-foreground shrink-0 font-mono text-[10.5px]">
+                    {c.cve.id}
+                  </span>
+                )}
+                <ArrowRight className="text-muted-foreground size-3.5 shrink-0" />
+              </button>
+            ))}
+          </div>
         </div>
       )}
 

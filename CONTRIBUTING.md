@@ -17,6 +17,27 @@ Kaynak eklerken `src/lib/references.ts` dosyasına kaydedin ve **başlık, kurum
 bağlantıyı açarak doğrulayın.** Uydurma kaynak, uydurma teknik kimlik veya "muhtemelen
 böyledir" türü iddialar reddedilir.
 
+## Gerçek vakalar: en sıkı kural burada
+
+`src/lib/cases.ts` arşivindeki her kayıt **gerçekten yaşanmış** bir olaydır. Buraya bir
+vaka eklemek, diğer katkılardan daha ağır bir yük getirir:
+
+1. **Birincil kaynağı açın ve okuyun.** CVE kaydı, araştırmacının kendi yazısı, satıcı
+   bülteni veya hakemli yayın. Haber derlemeleri birincil kaynak değildir; ikincil kaynak
+   olarak eklenebilir ama tek başına yetmez.
+2. **Tarih, sürüm numarası, CVSS puanı ve alıntıları kaynaktaki hâliyle yazın.** Yuvarlamayın,
+   hatırlamayın, çevirmeyin. Alıntıyı özgün dilinde bırakın ve `quote.by` alanına kimden
+   geldiğini yazın.
+3. **Kaynağın söylemediğini yazmayın.** Mekanizma kaynakta anlatılmıyorsa `chain` kısa kalır.
+   Boşluğu tahminle doldurmak, uydurma kaynak eklemekle aynı ağırlıkta bir ihlaldir.
+4. **`openIssue` alanı zorunludur.** Her düzeltmenin kapatmadığı bir taraf vardır; onu yazın.
+   Testler bu alanın dolu olmasını denetler.
+5. **Çalışan bir yük yayımlanmaz.** Vaka anlatımı mekanizma düzeyinde kalır.
+
+`npm test` bu kuralların makine tarafından denetlenebilir kısmını kontrol eder:
+tarih biçimi, birincil kaynak varlığı, HTTPS adresleri, CVE biçimi, `openIssue` doluluğu
+ve platform içi bağlantıların geçerliliği.
+
 ## Abartmayın
 
 Hiçbir denetim prompt injection'ı tek başına çözmez. `src/lib/controls.ts` içindeki her
@@ -61,6 +82,8 @@ Dört komutun dördü de geçmeden pull request açmayın. CI aynı komutları �
   `npx shadcn@latest add <bileşen>` ile güncelleyin.
 - Yeni senaryo için `src/lib/scenarios/` altına tek dosya ekleyip `index.ts`'e kaydedin.
   Ayrıntı: [docs/senaryo-yazimi.md](docs/senaryo-yazimi.md).
+- Yeni vaka için `src/lib/cases.ts` dizisine tek kayıt ekleyin; başka hiçbir yere
+  dokunmak gerekmez. İstatistikler, zaman çizelgesi ve süzgeçler bu diziden türetilir.
 - Erişilebilirlik: her etkileşimli öğenin erişilebilir adı olmalı; "hareketi azalt" ve
   "yüksek kontrast" tercihleri bozulmamalıdır.
 
