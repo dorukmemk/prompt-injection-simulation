@@ -84,6 +84,7 @@ Dört komutun dördü de geçmeden pull request açmayın. CI aynı komutları �
   Ayrıntı: [docs/senaryo-yazimi.md](docs/senaryo-yazimi.md).
 - Yeni vaka için `src/lib/cases.ts` dizisine tek kayıt ekleyin; başka hiçbir yere
   dokunmak gerekmez. İstatistikler, zaman çizelgesi ve süzgeçler bu diziden türetilir.
+  Ayrıntı: [docs/vaka-ekleme.md](docs/vaka-ekleme.md).
 - Erişilebilirlik: her etkileşimli öğenin erişilebilir adı olmalı; "hareketi azalt" ve
   "yüksek kontrast" tercihleri bozulmamalıdır.
 

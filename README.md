@@ -27,7 +27,9 @@ dalarak normalde görünmeyen karar katmanına iner.
   menü çubuğu, Dock, sürüklenebilir pencereler, ⌘K hızlı arama.
 - **Asistan** — modern bir yapay zekâ sohbet arayüzü. Belge eklenir, göndermeden önce
   incelenebilir; gönderince “Düşünüyor…” belirir ve kamera oraya dalar.
-- **Gerçek belgeler** — PDF sayfası, e-posta istemcisi görünümü ve tarayıcı sayfası
+- **Kod Asistanı** — gerçek bir düzenleyici: dosya ağacı, sekmeler, satır numaralı
+  kaynak görünümü ve uçbirim. Kod deposu üzerinden gelen saldırılar burada çalışır.
+- **Gerçek belgeler** — PDF sayfası, e-posta istemcisi, tarayıcı sayfası ve kod dosyası
   gerçekten çizilir. Simülasyon sırasında kamera belgenin üzerine yaklaşır, gizli
   talimatın bulunduğu bölgeyi çerçeveye alır ve kırmızıya boyar.
 - **Yedi senaryo, ikişer varyant** — her senaryo hem **korumasız** hem **korumalı**
@@ -129,6 +131,8 @@ src/
 sahneyi türetir: hangi nesnelerin ekranda olacağı, güven sınırının yırtılıp yırtılmadığı,
 hangi kapının kapandığı. Yeni senaryo eklemek tek bir dosya yazmaktır —
 bkz. [`docs/senaryo-yazimi.md`](docs/senaryo-yazimi.md).
+Aynı ilke vaka arşivi için de geçerlidir: yeni bir olay eklemek `src/lib/cases.ts`
+dizisine tek bir kayıt yazmaktır — bkz. [`docs/vaka-ekleme.md`](docs/vaka-ekleme.md).
 
 ### Kullanılan teknolojiler
 
@@ -174,8 +178,9 @@ Comet (Brave), ForcedLeak (Noma Security), ShadowLeak (Radware), takvim daveti s
 ## Katkı
 
 Yeni senaryo, çeviri, erişilebilirlik iyileştirmesi ve düzeltmeler memnuniyetle karşılanır.
-Başlamadan önce [CONTRIBUTING.md](CONTRIBUTING.md) ve
-[docs/senaryo-yazimi.md](docs/senaryo-yazimi.md) dosyalarını okuyun.
+Başlamadan önce [CONTRIBUTING.md](CONTRIBUTING.md) ve ekleyeceğiniz içeriğe göre
+[docs/senaryo-yazimi.md](docs/senaryo-yazimi.md) veya
+[docs/vaka-ekleme.md](docs/vaka-ekleme.md) dosyalarını okuyun.
 
 ## GTÜCYBER
 

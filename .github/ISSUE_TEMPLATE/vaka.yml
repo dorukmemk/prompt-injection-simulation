@@ -1,0 +1,106 @@
+name: Gerçek vaka önerisi
+description: Arşive kayda geçmiş bir olay öner
+labels: [vaka]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Önce [docs/vaka-ekleme.md](../../blob/main/docs/vaka-ekleme.md) dosyasını okuyun.
+
+        Bu arşive yalnızca **gerçekten yaşanmış** ve **birincil kaynağı açılıp okunmuş**
+        olaylar girer. Kaynağı olmayan bir öneri değerlendirilmez.
+
+  - type: input
+    id: urun
+    attributes:
+      label: Etkilenen ürün
+      placeholder: "Örn: Microsoft 365 Copilot"
+    validations:
+      required: true
+
+  - type: input
+    id: tarih
+    attributes:
+      label: Olayın tarihi
+      description: Kaynakta yazdığı gibi — ay ve yıl yeterli.
+      placeholder: "Haziran 2025"
+    validations:
+      required: true
+
+  - type: input
+    id: birincil
+    attributes:
+      label: Birincil kaynak bağlantısı
+      description: >
+        CVE kaydı, araştırmacının kendi yazısı, satıcı bülteni veya hakemli yayın.
+        Haber derlemesi birincil kaynak sayılmaz.
+      placeholder: "https://www.cve.org/CVERecord?id=..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sinif
+    attributes:
+      label: Saldırı sınıfı
+      options:
+        - Dolaylı enjeksiyon (saldırgan modelin okuduğu veriye yazıyor)
+        - Doğrudan jailbreak (saldırgan kullanıcı koltuğunda)
+    validations:
+      required: true
+
+  - type: input
+    id: yuzey
+    attributes:
+      label: Saldırı yüzeyi
+      description: Yükün taşındığı yer.
+      placeholder: "E-posta / Web sayfası / Kod deposu / Takvim / Kalıcı bellek …"
+    validations:
+      required: true
+
+  - type: textarea
+    id: ne-oldu
+    attributes:
+      label: Ne oldu?
+      description: Kaynakta anlatıldığı kadarıyla, 2–4 cümle. Tahmin eklemeyin.
+    validations:
+      required: true
+
+  - type: textarea
+    id: duzeltme
+    attributes:
+      label: Ne düzeltildi?
+      description: Satıcı ne yaptı, ne zaman? Kaynakta tarih varsa yazın.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acik-kalan
+    attributes:
+      label: Neyin kapanmadığı
+      description: >
+        Bu alan zorunludur. Her düzeltmenin kapatmadığı bir taraf vardır — kanalı kapatır
+        ama enjeksiyonu kapatmaz, bir dosya yolunu korur ama deseni korumaz, bir
+        sınıflandırıcı ekler ama olasılıksaldır. Kaynakta açıkça yazmıyorsa nereden
+        çıkardığınızı belirtin.
+    validations:
+      required: true
+
+  - type: input
+    id: ders
+    attributes:
+      label: Bu vaka ne öğretiyor?
+      description: Tek cümle. Slogan değil, olgu cümlesi.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: onay
+    attributes:
+      label: Onay
+      options:
+        - label: Birincil kaynağı açıp okudum; yazdığım tarih ve sayılar kaynaktaki hâliyle.
+          required: true
+        - label: Kaynağın söylemediği hiçbir şey eklemedim.
+          required: true
+        - label: Önerimde kopyalanıp kullanılabilecek çalışan bir saldırı yükü yok.
+          required: true

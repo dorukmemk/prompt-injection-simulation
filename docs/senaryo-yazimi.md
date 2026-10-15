@@ -5,12 +5,15 @@ yeni bir senaryo için React kodu yazmanız gerekmez.
 
 ```
 src/lib/scenarios/
-├─ layout.ts          # ortak düğüm iskeleti
-├─ mail-exfil.ts      # Sessiz Kurye
-├─ web-render.ts      # Beyaz Mürekkep
-├─ agent-chain.ts     # Zincir
-├─ direct-jailbreak.ts# Kılık
-└─ index.ts           # kayıt
+├─ layout.ts            # ortak düğüm iskeleti
+├─ mail-exfil.ts        # Sessiz Kurye      — e-posta
+├─ web-render.ts        # Beyaz Mürekkep    — web sayfası
+├─ agent-chain.ts       # Zincir            — PDF + çok adımlı araç zinciri
+├─ code-rce.ts          # Yan Kapı          — kod deposu + yapılandırma yazma
+├─ memory-persist.ts    # Kalıcı Not        — kalıcı bellek
+├─ rag-poison.ts        # Zehirli Kaynak    — bilgi tabanı (RAG)
+├─ direct-jailbreak.ts  # Kılık             — doğrudan jailbreak
+└─ index.ts             # kayıt
 ```
 
 ## 1. Dosyayı oluşturun
@@ -25,6 +28,19 @@ export const myScenario: Scenario = { /* ... */ }
 `index.ts` içindeki `SCENARIOS` dizisine ekleyin. Başka hiçbir yere dokunmanız gerekmez:
 masaüstü simgesi, ⌘K araması, ilgili uygulamanın kenar çubuğu ve ilerleme takibi otomatik
 olarak güncellenir.
+
+Senaryonun `app` alanı hangi uygulamada açılacağını belirler:
+
+| `app` | Uygulama | Hangi yük için |
+| --- | --- | --- |
+| `chat` | Asistan | Sohbete eklenen belge, kalıcı bellek |
+| `mail` | Posta Asistanı | Gelen kutusu |
+| `browser` | Pusula | Web sayfası |
+| `agent` | Ajan Konsolu | Toplu dosya işleme, bilgi tabanı sorgusu |
+| `code` | Kod Asistanı | Kod deposu, yapılandırma dosyası |
+
+Aynı uygulamada birden fazla senaryo olabilir; uygulamanın kenar çubuğu listeyi
+kendisi üretir.
 
 ## 2. Düğümler — sahnedeki nesneler
 
@@ -55,8 +71,15 @@ kimlik eklerseniz oraya bir satır ekleyin; yoksa türüne göre makul bir varsa
 ## 3. Yük — gerçek bir belge
 
 Güvenilmeyen içerik düz metin değil, **çizilebilir bir belgedir**. Aynı veri hem
-uygulamada (PDF görüntüleyici / e-posta istemcisi / tarayıcı sayfası) hem de
-simülasyonun belge sahnesinde kullanılır.
+uygulamada hem de simülasyonun belge sahnesinde kullanılır. Dört belge türü vardır ve
+her biri gerçekçi bir kabukla çizilir:
+
+| `kind` | Görünüm |
+| --- | --- |
+| `pdf` | Ataç şeridi, serif gövde, sayfa numarası |
+| `email` | Gönderen avatarı, tarih satırı, Yanıtla/İlet çubuğu |
+| `web` | Tarayıcı sekmesi, adres çubuğu, site gezintisi, alt bilgi |
+| `code` | Düzenleyici sekmeleri, dosya yolu, satır numaraları, Markdown renklendirmesi |
 
 ```ts
 payload: {
@@ -64,11 +87,12 @@ payload: {
   sourceMeta: 'PDF · 2 sayfa · metin katmanı okunabilir',
   hiddenHow: { simple, core, expert },   // gizleme tekniği üç derinlikte
   doc: {
-    kind: 'pdf',                  // 'pdf' | 'email' | 'web'
+    kind: 'pdf',                  // 'pdf' | 'email' | 'web' | 'code'
     title: 'aday-07.pdf',
     head: ['basvurular/aday-07.pdf', '2 sayfa · 184 KB'],
     brand: 'Nimbus CRM',          // web için site adı
-    nav: ['Ürün', 'Fiyatlandırma'],
+    nav: ['Ürün', 'Fiyatlandırma'],   // web için gezinti
+    tabs: ['paket.json', 'gunluk.js'], // code için açık diğer sekmeler
     from: { name: '…', address: '…@….example' },  // e-posta için
     blocks: [
       { type: 'title', text: 'ÖZGEÇMİŞ — K. Aydın' },
@@ -95,7 +119,32 @@ karartır ve bloğu kırmızıya boyar. Ek bir yapılandırma gerekmez.
 
 Alan adları **`.example`** olmalıdır (RFC 2606). Gerçek bir kuruma ait ad kullanmayın.
 
-## 4. Sahneler (beats)
+## 4. Bağlam — asistanın gerçekten okuduğu şey
+
+`context` alanı, okuma sahnelerinde satır satır taranan gerçek metni taşır. Bir
+`kind: 'ingest'` sahnesi tek bir kaynağa odaklandığında o kaynağın içeriği ekranda
+karakter karakter yazılır.
+
+```ts
+context: {
+  system: ['Sen bir kod asistanısın.', '…'],   // focus: ['system'] → satır satır okunur
+  systemTokens: 610,
+  userTokens: 42,                               // focus: ['user']   → userPrompt okunur
+  items: [                                      // focus: ['content'] → liste tek tek işaretlenir
+    { title: 'README.md', preview: '…', flagged: true },  // flagged = saldırganın kalemi
+  ],
+  itemsTokens: 4820,
+  memory: ['— Kullanıcı Türkçe yanıt tercih ediyor.', '…'],  // focus: ['memory']
+}
+```
+
+`memory` alanı yalnızca kalıcı bellek senaryolarında gereklidir ve senaryoda
+`id: 'memory'` düğümü bulunmalıdır (`memory-persist.ts`).
+
+Belirteç sayıları gerçekçi olmalıdır: okuma sahnesinde sayaç bu değerlere göre işler ve
+görünür metin ile belirteç sayısı arasındaki fark, gizli blokların ilk göstergesidir.
+
+## 5. Sahneler (beats)
 
 Her varyant bir sahne dizisidir. Sahne, görselleştirmeyi üç alanla sürer:
 
@@ -141,7 +190,7 @@ Her varyant bir sahne dizisidir. Sahne, görselleştirmeyi üç alanla sürer:
 - Karar noktalarında **tam olarak bir** seçenek `correct: true` olmalıdır; yanlış
   seçeneklerin geri bildirimi de öğretici olmalıdır.
 
-## 5. İki varyant zorunludur
+## 6. İki varyant zorunludur
 
 ```ts
 variants: {
@@ -156,18 +205,26 @@ variants: {
 - `toolLog` teknik profillerde araç çağrısı dökümünü gösterir; engellenen çağrılar için
   `blocked: true` kullanın.
 
-## 6. Doğrulama
+## 7. Doğrulama
 
 ```bash
 npm test
 ```
 
-Testler şunları denetler: kenarların var olan düğümlere bağlanması, odak ve durum
-kimliklerinin geçerliliği, kaynak kimliklerinin kayıtlı olması, üç derinliğin doldurulması,
-karar noktalarında tek doğru seçenek, sahne sürelerinin makul olması ve varyant yargılarının
-tutarlılığı.
+Testler her senaryo için ayrı ayrı şunları denetler: kenarların var olan düğümlere
+bağlanması, odak ve durum kimliklerinin geçerliliği, kaynak kimliklerinin kayıtlı olması,
+üç derinliğin doldurulması, karar noktalarında tek doğru seçenek, sahne sürelerinin makul
+olması, alan adlarının `.example` olması, dolaylı senaryolarda gizli blok bulunması ve
+varyant yargılarının tutarlılığı.
 
-## 7. Kaynaklar
+Veri testleri yeterli değildir: yeni senaryoyu **tarayıcıda da açın** ve her sahneyi
+tek tek gezin. Boş sahne (başlıksız veya nesnesiz) kabul edilmez.
+
+```bash
+npm run dev     # senaryoyu ilgili uygulamada açıp iki varyantı da izleyin
+```
+
+## 8. Kaynaklar
 
 Yeni bir kaynak gerekiyorsa `src/lib/references.ts` dosyasına ekleyin ve **bağlantıyı
 açarak başlık, kurum ve yılı doğrulayın.** Uydurma kaynak kabul edilmez.
